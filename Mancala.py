@@ -5,15 +5,21 @@ class Player:
         """Initializes the player and assigns a name attribute"""
         self._name = name
 
-    # unsure if I will need this ...
-    # def get_player(self):
-    #     return
+    def get_player_name(self):
+        """Returns the player object's name"""
+        return self._name
 
 class Mancala:
     """A class to represent the game, including the game board, and players."""
 
     def __init__(self):
-        """Constructor for the Mancala class.Initializes the required data members. All data members are private"""
+        """
+        Constructor for the Mancala class.Initializes the required data members. All data members are private.
+
+        The game board list has the corresponding pits and stores:
+        [player1 pit1, player1 pit2, player1 pit3, player1 pit4, player1 pit5, player1 pit6, player1 store, Player2
+         pit1, player2 pit2, player2 pit3, player2 pit4, player2 pit5, player2 pit6, player2 store, ]
+        """
         self._game_board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
 
     def create_player(self, player_name):
@@ -22,43 +28,7 @@ class Mancala:
         return player
 
     def print_board(self):
-        """Prints the game board in the following format(taking no parameters):
-        player1:
-
-        store: number
-        of
-        seeds in player
-        1’s
-        store
-
-        player
-        1
-        seeds
-        number
-        from pit
-        1
-        to
-        6 in a
-        list
-
-        player2:
-
-        store: number
-        of
-        seeds in player
-        2’s
-        store
-
-        player
-        2
-        seeds
-        number
-        from pit
-        1
-        to
-        6 in a
-        list
-        """
+        """Prints the current state of the game board, split into player pits and stores"""
         board = self._game_board
         p1_store = board[6]
         p1_pits = board[0:6]
@@ -68,22 +38,36 @@ class Mancala:
         print(f"player1: \nstore: {p1_store} \n{p1_pits} \nplayer2: \nstore: {p2_store} \n{p2_pits} \n ")
 
     def return_winner(self):
-        """If the game is over, returns the winner in the following format:
+        """Returns the winner of the game. If the game isn't over, returns 'Game is not ended'"""
+        board = self._game_board
+        p1_pits = board[0:6]
+        p2_pits = board[7:13]
+        p1_name = player1.get_player_name()
+        p2_name = player2.get_player_name()
 
-        Winner is player
-        1( or 2, based
-        on
-        the
-        actual
-        winner): player’s
-        name, if the game is a tie return ‘It’s a tie’, if the game is ongoing returns ‘Game has not ended’"""
-        pass
+        if set(p1_pits) == {0}:
+            p1_total = board[6]
+            p2_total = sum(board[7:14])
+            if p1_total > p2_total:
+                return f"Winner is player 1: {p1_name}"
+            else:
+                return f"Winner is player 2: {p2_name}"
+
+        elif set(p2_pits) == 0:
+            p1_total = sum(board[0:7])
+            p2_total = board[13]
+            if p1_total > p2_total:
+                return f"Winner is player 1: {p1_name}"
+            else:
+                return f"Winner is player 2: {p2_name}"
+
+        else:
+            return "Game has not ended"
 
     def play_game(self, player_index, pit_index):
         """
-        Takes in two parameters: the player index(1 or 2) and the pit index(1 - 6), both as integers.This class follows
-        the rules of the game (including the special rules) and changes the number of seeds in the pits and player
-        stores following the move.
+        Taskes in the player index (1 or 2) and the pit index (1-6). Conducts the move at the corresponding pit, and
+        takes into consideration the special rules of the game.
 
         If an invalid pit number is given, return "Invalid number for pit index"
 
@@ -92,9 +76,7 @@ class Mancala:
         If the player 1 win an extra round following the special rule1, print out “player 1
         take another turn"
 
-        At the end, the method should return a list of the current seed number in this format:
-        [player1 pit1, player1 pit2, player1 pit3, player1 pit4, player1 pit5, player1 pit6, player1 store, Player2
-         pit1, player2 pit2, player2 pit3, player2 pit4, player2 pit5, player2 pit6, player2 store, ]
+        At the end returns a list of the current seed number as a list
         """
         board = self._game_board
         p1_pits = board[0:6]
@@ -115,6 +97,28 @@ class Mancala:
         seeds_moving = board[board_index]
         board[board_index] = 0
 
+        p1_indexes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+        p2_indexes = [0, 1, 2, 3, 4, 5, 7, 8, 9, 10]
+        # for the matching of opposite pits, for use with special rule
+        opposite_pits = {0: 12, 1: 11, 2: 10, 3: 9, 4: 8, 5: 7}
+
+        if player_index == 1:
+            count = 1
+            for num in p1_indexes[1:(seeds_moving + 1)]:
+                board[board_index + num] = board[board_index + num] + 1
+                count += 1
+
+                # if last seed goes to p1 store, mention to take another turn
+                if count == seeds_moving and num == 6:
+                    print("player 1 take another turn")
+
+                elif count == seeds_moving and board[board_index + num] == 0:
+                    # remove the seed and put it in store
+                    board[board_index + num] = board[board_index + num] - 1
+                    board[6] += 1
+
+                    # remove opponents seeds and put in your store
+
 
 
         # return the list of the current seed number at the end
@@ -124,4 +128,10 @@ game = Mancala()
 player1 = game.create_player("Lily")
 player2 = game.create_player("Lucy")
 game.print_board()
-print(game.play_game(1, 6))
+game.play_game(1, 3)
+# game.play_game(1, 2)
+# game.play_game(1, 3)
+# game.play_game(1, 4)
+# game.play_game(1, 5)
+# game.play_game(1, 6)
+game.print_board()
