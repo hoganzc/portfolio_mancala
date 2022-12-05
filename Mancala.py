@@ -26,10 +26,16 @@ class Mancala:
          pit1, player2 pit2, player2 pit3, player2 pit4, player2 pit5, player2 pit6, player2 store, ]
         """
         self._game_board = [4, 4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 0]
+        self._player_names = []
+
+    def player_storage(self, player_name):
+        """Adds player names to list"""
+        self._player_names.append(player_name)
 
     def create_player(self, player_name):
         """takes one parameter of the player’s name as a string and returns the player object. """
         player = Player(player_name)
+        self.player_storage(player_name)
         return player
 
     def print_board(self):
@@ -47,8 +53,8 @@ class Mancala:
         board = self._game_board
         p1_pits = board[0:6]
         p2_pits = board[7:13]
-        p1_name = player1.get_player_name()
-        p2_name = player2.get_player_name()
+        p1_name = self._player_names[0]
+        p2_name = self._player_names[1]
 
         if set(p1_pits) == {0}:
             p1_total = board[6]
