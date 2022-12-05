@@ -1,3 +1,8 @@
+# Author: Zach Hogan
+# Github username: hoganzc
+# Date: 12/4/22
+# Description: Contains
+
 class Player:
     """A class to represent the player, including their name"""
 
@@ -103,37 +108,42 @@ class Mancala:
         opposite_pits = {0: 12, 1: 11, 2: 10, 3: 9, 4: 8, 5: 7}
 
         if player_index == 1:
-            count = 1
-            for num in p1_indexes[1:(seeds_moving + 1)]:
-                board[board_index + num] = board[board_index + num] + 1
+            count = 0
+            for num in p1_indexes[(board_index + 1):(board_index + seeds_moving + 1)]:
+                board[num] = board[num] + 1
                 count += 1
 
                 # if last seed goes to p1 store, mention to take another turn
                 if count == seeds_moving and num == 6:
                     print("player 1 take another turn")
 
-                elif count == seeds_moving and board[board_index + num] == 0:
+                elif count == seeds_moving and board[num] == 1:
                     # remove the seed and put it in store
-                    board[board_index + num] = board[board_index + num] - 1
+                    board[num] = board[num] - 1
                     board[6] += 1
 
                     # remove opponents seeds and put in your store, and set the opposite to 0
-                    board[6] += board[opposite_pits[board_index + num]]
-                    board[opposite_pits[board_index + num]] = 0
+                    board[6] += board[opposite_pits[num]]
+                    board[opposite_pits[num]] = 0
+
+            if set(board[0:6]) == {0}:
+                p2_total = sum(board[7:14])
+                board[13] = p2_total
+                for num in range(7, 13):
+                    board[num] = 0
 
 
         # return the list of the current seed number at the end
         return board
 
-# game = Mancala()
-# player1 = game.create_player("Lily")
-# player2 = game.create_player("Lucy")
-# game.print_board()
-# game.play_game(1, 3)
-# game.play_game(1, 2)
-# game.play_game(1, 3)
-# game.play_game(1, 4)
-# game.play_game(1, 5)
-# game.play_game(1, 6)
-# game.print_board()
-# print(game.return_winner())
+game = Mancala()
+player1 = game.create_player("Lily")
+player2 = game.create_player("Lucy")
+print(game.play_game(1, 1))
+print(game.play_game(1, 2))
+print(game.play_game(1, 3))
+print(game.play_game(1, 4))
+print(game.play_game(1, 5))
+print(game.play_game(1, 6))
+game.print_board()
+print(game.return_winner())
