@@ -105,38 +105,38 @@ class Mancala:
                 board_index = pit_index - 1
             else:
                 board_index = pit_index + 6
-        seeds_moving = board[board_index]
-        board[board_index] = 0
+            seeds_moving = board[board_index]
+            board[board_index] = 0
 
-        p1_indexes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-        p2_indexes = [0, 1, 2, 3, 4, 5, 7, 8, 9, 10]
-        # for the matching of opposite pits, for use with special rule
-        opposite_pits = {0: 12, 1: 11, 2: 10, 3: 9, 4: 8, 5: 7}
+            p1_indexes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            p2_indexes = [0, 1, 2, 3, 4, 5, 7, 8, 9, 10]
+            # for the matching of opposite pits, for use with special rule
+            opposite_pits = {0: 12, 1: 11, 2: 10, 3: 9, 4: 8, 5: 7}
 
-        if player_index == 1:
-            count = 0
-            for num in p1_indexes[(board_index + 1):(board_index + seeds_moving + 1)]:
-                board[num] = board[num] + 1
-                count += 1
+            if player_index == 1:
+                count = 0
+                for num in p1_indexes[(board_index + 1):(board_index + seeds_moving + 1)]:
+                    board[num] = board[num] + 1
+                    count += 1
 
-                # if last seed goes to p1 store, mention to take another turn
-                if count == seeds_moving and num == 6:
-                    print("player 1 take another turn")
+                    # if last seed goes to p1 store, mention to take another turn
+                    if count == seeds_moving and num == 6:
+                        print("player 1 take another turn")
 
-                elif count == seeds_moving and board[num] == 1:
-                    # remove the seed and put it in store
-                    board[num] = board[num] - 1
-                    board[6] += 1
+                    elif count == seeds_moving and board[num] == 1:
+                        # remove the seed and put it in store
+                        board[num] = board[num] - 1
+                        board[6] += 1
 
-                    # remove opponents seeds and put in your store, and set the opposite to 0
-                    board[6] += board[opposite_pits[num]]
-                    board[opposite_pits[num]] = 0
+                        # remove opponents seeds and put in your store, and set the opposite to 0
+                        board[6] += board[opposite_pits[num]]
+                        board[opposite_pits[num]] = 0
 
-            if set(board[0:6]) == {0}:
-                p2_total = sum(board[7:14])
-                board[13] = p2_total
-                for num in range(7, 13):
-                    board[num] = 0
+                if set(board[0:6]) == {0}:
+                    p2_total = sum(board[7:14])
+                    board[13] = p2_total
+                    for num in range(7, 13):
+                        board[num] = 0
 
 
         # return the list of the current seed number at the end
