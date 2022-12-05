@@ -117,8 +117,9 @@ class Mancala:
                     board[board_index + num] = board[board_index + num] - 1
                     board[6] += 1
 
-                    # remove opponents seeds and put in your store
-
+                    # remove opponents seeds and put in your store, and set the opposite to 0
+                    board[6] += board[opposite_pits[board_index + num]]
+                    board[opposite_pits[board_index + num]] = 0
 
 
         # return the list of the current seed number at the end
@@ -129,9 +130,10 @@ player1 = game.create_player("Lily")
 player2 = game.create_player("Lucy")
 game.print_board()
 game.play_game(1, 3)
-# game.play_game(1, 2)
-# game.play_game(1, 3)
-# game.play_game(1, 4)
-# game.play_game(1, 5)
-# game.play_game(1, 6)
+game.play_game(1, 2)
+game.play_game(1, 3)
+game.play_game(1, 4)
+game.play_game(1, 5)
+game.play_game(1, 6)
 game.print_board()
+print(game.return_winner())
