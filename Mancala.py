@@ -94,7 +94,7 @@ class Mancala:
         p2_pits = board[7:13]
 
         # catches if the input pit number is incorrect
-        if not 0 <= pit_index <= 6:
+        if not pit_index > 6 or pit_index <= 0:
             return "Invalid number for pit index"
         # converts p1 and p2 pits to a set to see if all values are 0 to determine of the game has ended
         elif set(p1_pits) == {0} or set(p2_pits) == {0}:
@@ -165,6 +165,7 @@ class Mancala:
                         board[num] = 0
 
             # return the list of the current seed number at the end
+            return board
 
 # game = Mancala()
 # player1 = game.create_player("Lily")
