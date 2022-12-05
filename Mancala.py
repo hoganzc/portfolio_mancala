@@ -1,7 +1,10 @@
 # Author: Zach Hogan
 # Github username: hoganzc
 # Date: 12/4/22
-# Description: Contains
+# Description: Contains classes Player and Mancala. Player class initializes the player object and assigns it a name.
+# Class Mancala initializes the Mancala board, and has functions to print the board, return the winner, and to play the
+# game. Special rules are accounted for. The main function is play_game, which intakes the player's index (1 or 2) and
+# the pit where the seeds are picked up. Special rules are also accounted for.
 
 class Player:
     """A class to represent the player, including their name"""
@@ -94,7 +97,7 @@ class Mancala:
         p2_pits = board[7:13]
 
         # catches if the input pit number is incorrect
-        if not pit_index > 6 or pit_index <= 0:
+        if not 0 <= pit_index <= 6:
             return "Invalid number for pit index"
         # converts p1 and p2 pits to a set to see if all values are 0 to determine of the game has ended
         elif set(p1_pits) == {0} or set(p2_pits) == {0}:
