@@ -165,7 +165,6 @@ class Mancala:
                         board[num] = 0
 
             # return the list of the current seed number at the end
-            # return board
 
 # game = Mancala()
 # player1 = game.create_player("Lily")
