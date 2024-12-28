@@ -1,10 +1,4 @@
-# Author: Zach Hogan
-# Github username: hoganzc
-# Date: 12/4/22
-# Description: Contains classes Player and Mancala. Player class initializes the player object and assigns it a name.
-# Class Mancala initializes the Mancala board, and has functions to print the board, return the winner, and to play the
-# game. Special rules are accounted for. The main function is play_game, which intakes the player's index (1 or 2) and
-# the pit where the seeds are picked up. Special rules are also accounted for.
+import tkinter as tk
 
 class Player:
     """A class to represent the player, including their name"""
@@ -51,6 +45,10 @@ class Mancala:
         p2_pits = board[7:13]
 
         print(f"player1: \nstore: {p1_store} \n{p1_pits} \nplayer2: \nstore: {p2_store} \n{p2_pits} \n ")
+
+    def return_num_seeds(self, i):
+        """Returns the number of seeds at a specific index on the game board"""
+        return self._game_board[i]
 
     def return_winner(self):
         """Returns the winner of the game. If the game isn't over, returns 'Game is not ended'"""
@@ -171,15 +169,67 @@ class Mancala:
             # return the list of the current seed number at the end
             return board
 
-game = Mancala()
-player1 = game.create_player("Lily")
-player2 = game.create_player("Lucy")
-print(game.play_game(1, 3))
-print(game.play_game(1, 1))
-print(game.play_game(2, 3))
-print(game.play_game(2, 4))
-print(game.play_game(1, 2))
-print(game.play_game(2, 2))
-print(game.play_game(1, 1))
-game.print_board()
-print(game.return_winner())
+# game = Mancala()
+# player1 = game.create_player("Lily")
+# player2 = game.create_player("Lucy")
+# print(game.play_game(1, 3))
+# print(game.play_game(1, 1))
+# print(game.play_game(2, 3))
+# print(game.play_game(2, 4))
+# print(game.play_game(1, 2))
+# print(game.play_game(2, 2))
+# print(game.play_game(1, 1))
+# game.print_board()
+# print(game.return_winner())
+
+
+class MancalaBoard:
+    def __init__(self, master, game):
+        self.master = master
+        self.master.title("Mancala Board")
+        self.master.geometry("750x100")
+
+        # Create the stores (larger buttons)
+        self.store1 = tk.Button(self.master, text=str(game.return_num_seeds(6)), font=("Arial", 16), width=8, height=2)
+        self.store1.grid(row=1, column=0, rowspan=2)
+
+        self.store2 = tk.Button(self.master, text=str(game.return_num_seeds(13)), font=("Arial", 16), width=8, height=2)
+        self.store2.grid(row=1, column=7, rowspan=2)
+
+        # Create Player 1's pits (top section)
+        self.pits1 = []
+        for i in range(6):
+            pit_button = tk.Button(self.master, text=str(game.return_num_seeds(5 - i)), font=("Arial", 14), width=6, height=2, command=lambda i=i: self.play(1, 6 - i))
+            pit_button.grid(row=1, column=i + 1)
+            self.pits1.append(pit_button)
+
+        # Create Player 2's pits (bottom section)
+        self.pits2 = []
+        for i in range(7, 13):
+            pit_button = tk.Button(self.master, text=str(game.return_num_seeds(i)), font=("Arial", 14), width=6, height=2, command=lambda i=i: self.play(2, i - 6))
+            pit_button.grid(row=2, column=i - 6)
+            self.pits2.append(pit_button)
+
+    def play(self, player, pit_index):
+        print(game.print_board())
+        print(player)
+        print(pit_index)
+        print(game.play_game(player, pit_index))
+        for i in range(6):
+            self.pits1[i].config(text=str(game.return_num_seeds(5 - i)))
+        for i in range(7, 13):
+            self.pits2[i-6].config(text=str(game.return_num_seeds(i)))
+        
+        # Update the stores' values in the GUI
+        self.store1.config(text=str(game.return_num_seeds(6)))
+        self.store2.config(text=str(game.return_num_seeds(13)))
+        
+
+# Set up the tkinter root window
+if __name__ == "__main__":
+    game = Mancala()
+    player1 = game.create_player("Player 1")
+    player2 = game.create_player("Player 2")
+    root = tk.Tk()
+    board = MancalaBoard(root, game)
+    root.mainloop()
